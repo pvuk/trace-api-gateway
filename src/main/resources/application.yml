@@ -1,0 +1,73 @@
+server:
+  port: 8070
+
+spring:
+  application:
+    name: trace-api-gateway
+
+#This enables dynamic routing using service names registered in Eureka.
+  cloud:
+    gateway:
+      server:
+        webflux:
+          discovery:
+            locator:
+              enabled: true # enabled: false # We'll define custom routes using metadata at DynamicRouteConfig
+              lower-case-service-id: true # Instead of manually defining each route, you can enable automatic routing using service discovery (like Eureka). This is done via the Discovery Locator feature.
+#          routes:
+#            - id: trace-bank-service
+
+#Code Ref: trace-bank-service is registred name in trace-service-registry and the same will be used by trace-api-gateway
+#uri: lb://trace-bank-service — This should match the actual service ID registered in Eureka.
+#Path=/trace-bank-service/** — This is the path you want to expose through the gateway.
+#StripPrefix=1 — This removes /trace-bank-service-api-gw before forwarding to the service.
+#So when you call:
+#
+#http://localhost:8070/trace-bank-service-api-gw/bank/getAllBranchesByBankGroupCrID/7
+#It will forward to:
+#
+#http://trace-bank-service/bank/getAllBranchesByBankGroupCrID/7
+
+#              uri: lb://trace-bank-service #lb:// tells the gateway to use load-balanced service discovery via Eureka.
+#              predicates:
+#                - Path=/bank/**
+##              filters:
+##                - StripPrefix=1 #StripPrefix=1 removes the first path segment (/bank or /cards) before forwarding the request.
+#            - id: trace-cards-service
+#              uri: lb://trace-cards-service
+#              predicates:
+#                - Path=/cards/**
+
+#Distributed Tracing using Zipkin
+  zipkin:
+   base-url: http://localhost:9411
+   enabled: true
+
+  sleuth:
+   sampler:
+    probability: 1.0 # 100% sampling for tracing
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8751/eureka/
+
+#Enable Actuator Endpoints
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+
+#Verify Gateway Is Picking Up the Route
+#Add logging to confirm routes are being registered:
+logging:
+ level:
+  "[org.springframework.cloud.gateway]": DEBUG
