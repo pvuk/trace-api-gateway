@@ -71,3 +71,29 @@ Open GitHub Desktop — it will detect the new files.
 Add a commit message (e.g., Initial commit of trace-api-gateway project).
 Click Commit to main.
 Click Push origin to upload the files to GitHub.
+
+# How to clone using STS
+🔧 If the repository is local (already cloned):
+Open STS.
+Go to File > Import.
+Choose Existing Maven Projects or General > Existing Projects into Workspace.
+Click Next, then Browse to the folder where your repository is located.
+Select the project and click Finish.
+This will map the project to the repository already present on your system.
+
+🌐 If the repository is remote (e.g., GitHub):
+Clone the repository:
+
+In STS, go to File > Import > Git > Projects from Git.
+Choose Clone URI and click Next.
+Enter the repository URL, username, and password/token if required.
+Choose the branch and destination directory.
+Click Finish after selecting the project type (e.g., Maven).
+Map the project:
+
+STS will automatically detect the project structure and import it.
+If not, go to File > Import > Existing Maven Projects and point to the cloned directory.
+✅ Verify Git Mapping:
+Right-click the project > Team > Share Project.
+If Git is already mapped, it will show the repository.
+If not, select Git and choose the repository location.
